@@ -11,7 +11,7 @@ const paths = {
     code: [path.join(__dirname, "js"), path.join(__dirname, "MapStore2", "web", "client")]
 };
 
-module.exports = require('./MapStore2/build/buildConfig')(
+const webpackConfig = require('./MapStore2/build/buildConfig')(
     {
         'MapStore2-C098': path.join(__dirname, "js", "app"),
         'MapStore2-C098-embedded': path.join(__dirname, "MapStore2", "web", "client", "product", "embedded"),
@@ -50,3 +50,11 @@ module.exports = require('./MapStore2/build/buildConfig')(
         '@js': path.resolve(__dirname, 'js')
     }
 );
+
+module.exports = {
+    ...webpackConfig,
+    plugins: [
+        ...(webpackConfig.plugins || []),
+        ...(require('./module-replacements.webpack') || [])
+    ]
+};
