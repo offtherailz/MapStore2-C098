@@ -70,7 +70,7 @@ const addBaseParams = (url, params) => {
 };
 
 const isSupportedLayer = (layer, maptype) => {
-    const Layers = require('../../../MapStore2/web/client/utils/' + maptype + '/Layers');
+    const Layers = require('../../MapStore2/web/client/utils/' + maptype + '/Layers');
     if (layer.type === "mapquest" || layer.type === "bing") {
         return Layers.isSupported(layer.type) && layer.apiKey && layer.apiKey !== "__API_KEY_MAPQUEST__" && !layer.invalid;
     }
@@ -262,7 +262,7 @@ const getURLs = (urls, queryParametersString = '') => {
     return urls.map((url) => url.split("\?")[0] + queryParametersString);
 };
 
-const SecurityUtils = require('../../../MapStore2/web/client/utils/SecurityUtils');
+const SecurityUtils = require('../../MapStore2/web/client/utils/SecurityUtils');
 
 const LayerCustomUtils = {};
 
