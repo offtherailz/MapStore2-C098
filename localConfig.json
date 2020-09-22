@@ -270,7 +270,8 @@
           "showHighlightFeatureButton": true,
 					"viewerOptions": {
 						"container": "{context.ReactSwipe}"
-					}
+					},
+					"enableMapTipFormat": true
 				},
 				"override": {
 					"Toolbar": {
@@ -332,7 +333,12 @@
 			},
       "FilterLayer",
 			"AddGroup",
-      "TOCItemsSettings",
+      {
+		  "name": "TOCItemsSettings",
+		  "cfg": {
+			  "showMapTipTab": true
+		  }
+		},
       "ThematicLayer",
 			"Tutorial", {
         "name": "MapFooter"
