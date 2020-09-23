@@ -10,7 +10,7 @@
             "mapTipDeactivate": "Disattiva il layer per MapTip"
         },
         "layerProperties": {
-            "mapTip": "Descrizione comando GFI"
+            "mapTip": "Formato del MapTip"
         },
         "mapTipFormatLbl": "Formato della descrizione comando di GFI"
     }
