@@ -10,8 +10,8 @@
             "mapTipDeactivate": "Deactivate layer for MapTip"
         },
         "layerProperties": {
-            "mapTip": "GFI Tooltip"
+            "mapTip": "MapTip"
         },
-        "mapTipFormatLbl": "GFI Tooltip format"
+        "mapTipFormatLbl": "MapTip format"
     }
 }

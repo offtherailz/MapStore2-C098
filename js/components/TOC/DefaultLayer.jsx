@@ -145,7 +145,7 @@ class DefaultLayer extends React.Component {
             (<LayersTool key="maptipactivecheck"
                 tooltip={active ? "toc.mapTipDeactivate" : "toc.mapTipActivate"}
                 node={this.props.node}
-                glyph={active ? 'star' : 'star-empty'}
+                glyph={active ? '1-map' : 'tag'}
                 onClick={node => this.props.changeMapTipActiveLayer(active ? undefined : node.id)}/>) : null;
     }
 
