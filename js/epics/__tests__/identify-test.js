@@ -68,10 +68,10 @@ describe('identify Epics', () => {
             }
         };
         const sentActions = [featureInfoClick({ latlng: { lat: 36.95, lng: -79.84 } })];
-        testEpic(getFeatureInfoOnFeatureInfoClick, 2, sentActions, ([a0, a1]) => {
-            expect(a0.type).toBe(PURGE_MAPINFO_RESULTS);
-            expect(a1.type).toBe(NO_QUERYABLE_LAYERS);
-
+        testEpic(getFeatureInfoOnFeatureInfoClick, 3, sentActions, ([a0, a1, a2]) => {
+            expect(a0.type).toBe(SET_GFI_TYPE);
+            expect(a1.type).toBe(PURGE_MAPINFO_RESULTS);
+            expect(a2.type).toBe(NO_QUERYABLE_LAYERS);
             done();
         }, state);
     });
