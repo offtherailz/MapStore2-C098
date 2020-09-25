@@ -142,7 +142,7 @@ export default {
                 }
 
                 if (queryableLayers.length === 0) {
-                    return Rx.Observable.of(purgeMapInfoResults(), noQueryableLayers());
+                    return Rx.Observable.of(setGfiType(gfiType), purgeMapInfoResults(), noQueryableLayers());
                 }
                 // TODO: make it in the application getState()
                 const excludeParams = ["SLD_BODY"];
