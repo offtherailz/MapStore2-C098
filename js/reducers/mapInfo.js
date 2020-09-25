@@ -32,7 +32,8 @@ const {
     SET_CURRENT_EDIT_FEATURE_QUERY,
     SET_MAP_TRIGGER,
     SET_ENABLE_MAP_TIP_FORMAT,
-    SET_MAP_TIP_ACTIVE_LAYER_ID
+    SET_MAP_TIP_ACTIVE_LAYER_ID,
+    SET_GFI_TYPE
 } = require('../actions/mapInfo');
 const {
     MAP_CONFIG_LOADED
@@ -86,7 +87,7 @@ function receiveResponse(state, action, type) {
         // Handle data and vector responses
         const {configuration: config, requests} = state;
         let responses = state.responses || [];
-        const isHover = (config?.trigger === "hover"); // Display info trigger
+        const isHover = config?.trigger === "hover" || !!config?.mapTipActiveLayerId; // Display info trigger
 
         if (!isVector) {
             const updateResponse = {
@@ -104,6 +105,7 @@ function receiveResponse(state, action, type) {
             }
         }
 
+        console.log('isHover', isHover);
         let indexObj;
         if (isHover) {
             indexObj = {loaded: true, index: 0};
@@ -468,6 +470,12 @@ function mapInfo(state = initState, action) {
                 ...state.configuration,
                 mapTipActiveLayerId: action.layerId
             }
+        };
+    }
+    case SET_GFI_TYPE: {
+        return {
+            ...state,
+            gfiType: action.gfiType
         };
     }
     default:

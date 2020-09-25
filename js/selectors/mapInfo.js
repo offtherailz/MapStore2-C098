@@ -60,9 +60,9 @@ const createInfoFormatSelector = gfiType => createSelector(generalInfoFormatObje
 const generalInfoFormatSelector = createInfoFormatSelector('featureInfo');
 const mapTipFormatSelector = createInfoFormatSelector('mapTip');
 const mapTipFormatEnabledSelector = state => state?.mapInfo?.enableMapTipFormat;
-const featureInfoClickFormatSelector = createSelector(generalInfoFormatSelector, mapTipFormatSelector, mapTipFormatEnabledSelector, identifyFloatingTool,
-    (infoFormat, mapTipFormat, mapTipFormatEnabled, mouseMoveIdentifyActive) => mapTipFormatEnabled && mouseMoveIdentifyActive ? mapTipFormat : infoFormat);
-const identifyGfiTypeSelector = createSelector(identifyFloatingTool, mapTipFormatEnabledSelector, (mouseMoveIdentifyActive, mapTipFormatEnabled) => mouseMoveIdentifyActive && mapTipFormatEnabled ? 'mapTip' : 'featureInfo');
+const identifyGfiTypeSelector = state => state?.mapInfo?.gfiType;
+const featureInfoClickFormatSelector = createSelector(generalInfoFormatSelector, mapTipFormatSelector, identifyGfiTypeSelector,
+    (infoFormat, mapTipFormat, gfiType) => gfiType === 'mapTip' ? mapTipFormat : infoFormat);
 const mapTipActiveLayerIdSelector = state => state?.mapInfo?.configuration?.mapTipActiveLayerId;
 const showEmptyMessageGFISelector = (state) => get(state, "mapInfo.configuration.showEmptyMessageGFI", true);
 const mapInfoConfigurationSelector = (state) => get(state, "mapInfo.configuration", {});
@@ -109,7 +109,6 @@ const stopGetFeatureInfoSelector = createSelector(
  * Defines the general options of the identifyTool to build the request
  */
 const identifyOptionsSelector = createStructuredSelector({
-    format: featureInfoClickFormatSelector,
     map: mapSelector,
     point: clickPointSelector,
     currentLocale: currentLocaleSelector
