@@ -40,13 +40,6 @@ const webpackConfig = require('./MapStore2/build/buildConfig')(
         },
         '/geoserver/': {
             target: "http://webgis.sir.toscana.it"
-        },
-        '/proxy': {
-            target: "https://dev.mapstore.geo-solutions.it/mapstore",
-            secure: false,
-            headers: {
-                host: "dev.mapstore.geo-solutions.it"
-            }
         }
     }
 );
