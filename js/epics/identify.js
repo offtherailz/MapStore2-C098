@@ -14,12 +14,12 @@ import {
     LOAD_FEATURE_INFO, ERROR_FEATURE_INFO, GET_VECTOR_INFO,
     FEATURE_INFO_CLICK, CLOSE_IDENTIFY, TOGGLE_HIGHLIGHT_FEATURE,
     PURGE_MAPINFO_RESULTS, EDIT_LAYER_FEATURES,
-    UPDATE_FEATURE_INFO_CLICK_POINT,
+    UPDATE_FEATURE_INFO_CLICK_POINT, SET_MAP_TIP_ACTIVE_LAYER_ID,
     featureInfoClick, updateCenterToMarker, purgeMapInfoResults,
     exceptionsFeatureInfo, loadFeatureInfo, errorFeatureInfo,
     noQueryableLayers, newMapInfoRequest, getVectorInfo,
     showMapinfoMarker, hideMapinfoMarker, setCurrentEditFeatureQuery,
-    clearWarning
+    clearWarning, setGfiType
 } from '../actions/mapInfo';
 
 import { SET_CONTROL_PROPERTIES, SET_CONTROL_PROPERTY, TOGGLE_CONTROL } from '../../MapStore2/web/client/actions/controls';
@@ -39,7 +39,8 @@ import { stopGetFeatureInfoSelector, identifyOptionsSelector,
     isMapPopup, isHighlightEnabledSelector,
     itemIdSelector, overrideParamsSelector, filterNameListSelector,
     currentEditFeatureQuerySelector, mapTriggerSelector,
-    identifyGfiTypeSelector, mapTipActiveLayerIdSelector} from '../selectors/mapInfo';
+    mapTipFormatSelector, mapTipActiveLayerIdSelector, generalInfoFormatSelector, requestsSelector,
+    isLoadedResponseSelector } from '../selectors/mapInfo';
 import { centerToMarkerSelector, queryableLayersSelector, queryableSelectedLayersSelector } from '../../MapStore2/web/client/selectors/layers';
 import { modeSelector, getAttributeFilters, isFeatureGridOpen } from '../../MapStore2/web/client/selectors/featuregrid';
 import { spatialFieldSelector } from '../../MapStore2/web/client/selectors/queryform';
@@ -124,9 +125,10 @@ export default {
      */
     getFeatureInfoOnFeatureInfoClick: (action$, { getState = () => { } }) =>
         action$.ofType(FEATURE_INFO_CLICK)
-            .switchMap(({ point, filterNameList = [], overrideParams = {} }) => {
-                const gfiType = identifyGfiTypeSelector(getState());
+            .switchMap(({ point, gfiType = 'featureInfo', filterNameList = [], overrideParams = {} }) => {
                 const mapTipActiveLayerId = mapTipActiveLayerIdSelector(getState());
+                const generalFormat = generalInfoFormatSelector(getState());
+                const mapTipFormat = mapTipFormatSelector(getState());
 
                 // Reverse - To query layer in same order as in TOC
                 let queryableLayers = reverse(queryableLayersSelector(getState()));
@@ -156,7 +158,12 @@ export default {
                 })))
                     .mergeMap(layer => {
                         let env = localizedLayerStylesEnvSelector(getState());
-                        let { url, request, metadata } = MapInfoUtils.buildIdentifyRequest(layer, {...identifyOptionsSelector(getState()), env, gfiType });
+                        let { url, request, metadata } = MapInfoUtils.buildIdentifyRequest(layer, {
+                            ...identifyOptionsSelector(getState()),
+                            format: gfiType === 'featureInfo' ? generalFormat : mapTipFormat,
+                            env,
+                            gfiType
+                        });
                         // request override
                         if (itemIdSelector(getState()) && overrideParamsSelector(getState())) {
                             request = {...request, ...overrideParamsSelector(getState())[layer.name]};
@@ -187,9 +194,9 @@ export default {
                 // NOTE: multiSelection is inside the event
                 // TODO: move this flag in the application state
                 if (point && point.modifiers && point.modifiers.ctrl === true && point.multiSelection) {
-                    return out$;
+                    return out$.startWith(setGfiType(gfiType));
                 }
-                return out$.startWith(purgeMapInfoResults(), clearWarning());
+                return out$.startWith(purgeMapInfoResults(), clearWarning(), setGfiType(gfiType));
             }),
     /**
      * if `clickLayer` is present, this means that `handleClickOnLayer` is true for the clicked layer, so the marker have to be hidden, because
@@ -265,7 +272,7 @@ export default {
                 enabled
                 && clickPointSelector(getState())
             )
-            .switchMap( () => Rx.Observable.from([
+            .switchMap(() => Rx.Observable.from([
                 featureInfoClick(
                     clickPointSelector(getState()),
                     clickLayerSelector(getState()),
@@ -394,10 +401,13 @@ export default {
                 const isMeasureEnabled = measureSelector(getState());
                 const isMouseOut = getState().mousePosition.mouseOut;
                 const isMouseMoveIdentifyDisabled = !isMouseMoveIdentifyActiveSelector(getState());
-                if (isMouseMoveIdentifyDisabled || isAnnotationsEnabled || isMeasureEnabled || isMouseOut) {
+                const mapTipActiveLayerId = mapTipActiveLayerIdSelector(getState());
+                const requests = requestsSelector(getState()) || [];
+                const isLoadedResponse = isLoadedResponseSelector(getState());
+                if ((isMouseMoveIdentifyDisabled && !mapTipActiveLayerId) || mapTipActiveLayerId && requests.length > 0 && !isLoadedResponse || isAnnotationsEnabled || isMeasureEnabled || isMouseOut) {
                     return Rx.Observable.empty();
                 }
-                return Rx.Observable.of(featureInfoClick(position, layer))
+                return Rx.Observable.of(featureInfoClick(position, layer, [], {}, null, mapTipActiveLayerId ? 'mapTip' : 'featureInfo'))
                     .merge(Rx.Observable.of(addPopup(uuid(), { component: IDENTIFY_POPUP, maxWidth: 600, position: {  coordinates: position ? position.rawPos : []}, autoPanMargin: 70, autoPan: true})));
             }),
     /**
@@ -408,7 +418,7 @@ export default {
             .switchMap(() => {
                 let observable = Rx.Observable.empty();
                 const popups = getState()?.mapPopups?.popups || [];
-                if (popups.length && !isMouseMoveIdentifyActiveSelector(getState())) {
+                if (popups.length && !isMouseMoveIdentifyActiveSelector(getState()) && !mapTipActiveLayerIdSelector(getState())) {
                     const activePopupId = popups[0].id;
                     observable = Rx.Observable.of(removePopup(activePopupId));
                 }
@@ -433,7 +443,10 @@ export default {
      */
     removeMapInfoMarkerOnRemoveMapPopupEpic: (action$, {getState}) =>
         action$.ofType(REMOVE_MAP_POPUP)
-            .switchMap(() => isMouseMoveIdentifyActiveSelector(getState()) ? Rx.Observable.of(hideMapinfoMarker()) : Rx.Observable.empty()),
+            .switchMap(() => isMouseMoveIdentifyActiveSelector(getState()) || mapTipActiveLayerIdSelector(getState()) ? Rx.Observable.of(hideMapinfoMarker()) : Rx.Observable.empty()),
+    purgeMapInfoResultsOnRemoveMapPopupEpic: (action$, {getState}) =>
+        action$.ofType(REMOVE_MAP_POPUP)
+            .switchMap(() => isMouseMoveIdentifyActiveSelector(getState()) || mapTipActiveLayerIdSelector(getState()) ? Rx.Observable.of(purgeMapInfoResults()) : Rx.Observable.empty()),
     /**
     * Sets which trigger to use on the map
     */
@@ -442,6 +455,15 @@ export default {
             .switchMap(() => {
                 return Rx.Observable.of(
                     mapTriggerSelector(store.getState()) === 'hover' ? registerEventListener('mousemove', 'identifyFloatingTool') : unRegisterEventListener('mousemove', 'identifyFloatingTool')
+                );
+            }),
+    setMapTipActveLayerIdEpic: (action$, store) =>
+        action$.ofType(SET_MAP_TIP_ACTIVE_LAYER_ID, MAP_CONFIG_LOADED)
+            .switchMap(() => {
+                const mapTipActiveLayerId = mapTipActiveLayerIdSelector(store.getState());
+
+                return Rx.Observable.of(
+                    ...(mapTipActiveLayerId ? [registerEventListener('mousemove', 'mapTip')] : [unRegisterEventListener('mousemove', 'mapTip'), setGfiType('featureInfo')])
                 );
             })
 };

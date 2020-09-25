@@ -202,7 +202,7 @@ const IdentifyPlugin = compose(
         ...ownProps,
         ...stateProps,
         ...dispatchProps,
-        enabled: stateProps.enabled && (stateProps.isCesium || !ownProps.showInMapPopup) && !stateProps.floatingIdentifyEnabled,
+        enabled: stateProps.enabled && (stateProps.isCesium || !ownProps.showInMapPopup) && !stateProps.floatingIdentifyEnabled && stateProps.gfiType !== 'mapTip',
         warning: !stateProps.floatingIdentifyEnabled && stateProps.warning
     })),
     // highlight support

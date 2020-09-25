@@ -35,6 +35,7 @@ const SET_CURRENT_EDIT_FEATURE_QUERY = 'IDENTIFY:CURRENT_EDIT_FEATURE_QUERY';
 const SET_MAP_TRIGGER = 'IDENTIFY:SET_MAP_TRIGGER';
 const SET_ENABLE_MAP_TIP_FORMAT = 'IDENTIFY:SET_ENABLE_MAP_TIP_FORMAT';
 const SET_MAP_TIP_ACTIVE_LAYER_ID = 'IDENTIFY:SET_MAP_TIP_ACTIVE_LAYER_ID';
+const SET_GFI_TYPE = 'IDENTIFY:SET_GFI_TYPE';
 
 const TOGGLE_EMPTY_MESSAGE_GFI = "IDENTIFY:TOGGLE_EMPTY_MESSAGE_GFI";
 const toggleEmptyMessageGFI = () => ({type: TOGGLE_EMPTY_MESSAGE_GFI});
@@ -203,15 +204,17 @@ function updateCenterToMarker(status) {
  * @param {object[]} [filterNameList=[]] list of layers to perform the GFI request
  * @param {object} [overrideParams={}] a map based on name as key and objec as value for overriding request params
  * @param {string} [itemId=null] id of the item needed for filtering results
+ * @param {string} gfiType mapTip or featureInfo
  */
-function featureInfoClick(point, layer, filterNameList = [], overrideParams = {}, itemId = null) {
+function featureInfoClick(point, layer, filterNameList = [], overrideParams = {}, itemId = null, gfiType = 'featureInfo') {
     return {
         type: FEATURE_INFO_CLICK,
         point,
         layer,
         filterNameList,
         overrideParams,
-        itemId
+        itemId,
+        gfiType
     };
 }
 
@@ -288,6 +291,11 @@ const setMapTipActiveLayerId = (layerId) => ({
     layerId
 });
 
+const setGfiType = (gfiType) => ({
+    type: SET_GFI_TYPE,
+    gfiType
+});
+
 module.exports = {
     ERROR_FEATURE_INFO,
     EXCEPTIONS_FEATURE_INFO,
@@ -336,5 +344,6 @@ module.exports = {
     SET_CURRENT_EDIT_FEATURE_QUERY, setCurrentEditFeatureQuery,
     SET_MAP_TRIGGER, setMapTrigger,
     SET_ENABLE_MAP_TIP_FORMAT, setEnableMapTipFormat,
-    SET_MAP_TIP_ACTIVE_LAYER_ID, setMapTipActiveLayerId
+    SET_MAP_TIP_ACTIVE_LAYER_ID, setMapTipActiveLayerId,
+    SET_GFI_TYPE, setGfiType
 };

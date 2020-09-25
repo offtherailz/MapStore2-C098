@@ -13,6 +13,7 @@ module.exports = [
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/components\/TOC\/fragments\/settings\/FeatureInfoEditor\.jsx/, '../../../../../../../js/components/TOC/fragments/settings/FeatureInfoEditor.jsx'),
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/components\/TOC\/fragments\/settings\/FeatureInfo\.jsx/, '../../../../../../../js/components/TOC/fragments/settings/GFI.jsx'),
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/epics\/identify\.js/, '../../../../js/epics/identify.js'),
+    new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/epics\/maplayout\.js/, '../../../../js/epics/maplayout.js'),
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/plugins\/Identify\.jsx/, '../../../../js/plugins/Identify.jsx'),
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/plugins\/TOC\.jsx/, '../../../../js/plugins/TOC.jsx'),
     new NormalModuleReplacementPlugin(/MapStore2\/web\/client\/plugins\/TOCItemsSettings\.jsx/, '../../../../js/plugins/TOCItemsSettings.jsx'),
