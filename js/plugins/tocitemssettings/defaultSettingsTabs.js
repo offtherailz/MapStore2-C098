@@ -7,31 +7,32 @@
  */
 
 import React from 'react';
-import Message from '../../../MapStore2/web/client/components/I18N/Message';
+import Message from '@mapstore/components/I18N/Message';
 import { filter, head, sortBy } from 'lodash';
 
 import { defaultProps } from 'recompose';
 import { Glyphicon } from 'react-bootstrap';
 
-import HTMLViewer from '../../../MapStore2/web/client/components/data/identify/viewers/HTMLViewer';
-import TextViewer from '../../../MapStore2/web/client/components/data/identify/viewers/TextViewer';
-import JSONViewer from '../../components/data/identify/viewers/JSONViewer';
-import HtmlRenderer from '../../../MapStore2/web/client/components/misc/HtmlRenderer';
+import HTMLViewer from '@mapstore/components/data/identify/viewers/HTMLViewer';
+import TextViewer from '@mapstore/components/data/identify/viewers/TextViewer';
 
-import MapInfoUtils from '../../utils/MapInfoUtils';
-import PluginsUtils from '../../../MapStore2/web/client/utils/PluginsUtils';
+import HtmlRenderer from '@mapstore/components/misc/HtmlRenderer';
 
-import General from '../../../MapStore2/web/client/components/TOC/fragments/settings/General';
-import Display from '../../../MapStore2/web/client/components/TOC/fragments/settings/Display';
+import PluginsUtils from '@mapstore/utils/PluginsUtils';
+import General from '@mapstore/components/TOC/fragments/settings/General';
+import Display from '@mapstore/components/TOC/fragments/settings/Display';
 
-import Elevation from '../../../MapStore2/web/client/components/TOC/fragments/settings/Elevation';
-import FeatureInfoEditor from '../../components/TOC/fragments/settings/FeatureInfoEditor';
-import LoadingView from '../../../MapStore2/web/client/components/misc/LoadingView';
-import html from 'raw-loader!../../../MapStore2/web/client/plugins/tocitemssettings/featureInfoPreviews/responseHTML.txt';
-import json from 'raw-loader!../../../MapStore2/web/client/plugins/tocitemssettings/featureInfoPreviews/responseJSON.txt';
-import text from 'raw-loader!../../../MapStore2/web/client/plugins/tocitemssettings/featureInfoPreviews/responseText.txt';
-import SimpleVectorStyleEditor from '../../../MapStore2/web/client/plugins/tocitemssettings/SimpleVectorStyleEditor';
+import Elevation from '@mapstore/components/TOC/fragments/settings/Elevation';
 
+import LoadingView from '@mapstore/components/misc/LoadingView';
+import html from 'raw-loader!@mapstore/plugins/tocitemssettings/featureInfoPreviews/responseHTML.txt';
+import json from 'raw-loader!@mapstore/plugins/tocitemssettings/featureInfoPreviews/responseJSON.txt';
+import text from 'raw-loader!@mapstore/plugins/tocitemssettings/featureInfoPreviews/responseText.txt';
+import SimpleVectorStyleEditor from "@mapstore/plugins/styleeditor/VectorStyleEditor";
+
+import FeatureInfoEditor from "@js/components/TOC/fragments/settings/FeatureInfoEditor";
+import JSONViewer from "@js/components/data/identify/viewers/JSONViewer";
+import MapInfoUtils from "@js/utils/MapInfoUtils";
 
 const responses = {
     html,
@@ -39,7 +40,7 @@ const responses = {
     text
 };
 
-import { StyleSelector } from '../../../MapStore2/web/client/plugins/styleeditor/index';
+import { StyleSelector } from '@mapstore/plugins/styleeditor/index';
 
 const StyleList = defaultProps({ readOnly: true })(StyleSelector);
 

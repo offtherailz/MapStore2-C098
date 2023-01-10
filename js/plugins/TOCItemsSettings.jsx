@@ -11,21 +11,22 @@ import PropTypes from 'prop-types';
 
 import {createSelector} from 'reselect';
 import { compose, defaultProps, withPropsOnChange, getContext} from 'recompose';
-import { createPlugin } from '../../MapStore2/web/client/utils/PluginsUtils';
-import LayersUtils from '../utils/LayersUtils';
-import {hideSettings, updateSettings, updateNode, updateSettingsParams} from '../../MapStore2/web/client/actions/layers';
-import {getLayerCapabilities} from '../../MapStore2/web/client/actions/layerCapabilities';
-import {updateSettingsLifecycle} from "../../MapStore2/web/client/components/TOC/enhancers/tocItemsSettings";
-import TOCItemsSettings from '../../MapStore2/web/client/components/TOC/TOCItemsSettings';
-import defaultSettingsTabs from './tocitemssettings/defaultSettingsTabs';
-import { initialSettingsSelector, originalSettingsSelector, activeTabSettingsSelector } from '../../MapStore2/web/client/selectors/controls';
-import {layerSettingSelector, groupsSelector, elementSelector} from '../../MapStore2/web/client/selectors/layers';
-import {mapLayoutValuesSelector} from '../../MapStore2/web/client/selectors/maplayout';
-import {currentLocaleSelector, currentLocaleLanguageSelector} from '../../MapStore2/web/client/selectors/locale';
-import {isAdminUserSelector} from '../../MapStore2/web/client/selectors/security';
-import {isLocalizedLayerStylesEnabledSelector} from '../../MapStore2/web/client/selectors/localizedLayerStyles';
-import {setControlProperty} from '../../MapStore2/web/client/actions/controls';
-import {toggleStyleEditor} from '../../MapStore2/web/client/actions/styleeditor';
+import { createPlugin } from '@mapstore/utils/PluginsUtils';
+import {hideSettings, updateSettings, updateNode, updateSettingsParams} from '@mapstore/actions/layers';
+import {getLayerCapabilities} from '@mapstore/actions/layerCapabilities';
+import {updateSettingsLifecycle} from "@mapstore/components/TOC/enhancers/tocItemsSettings";
+import TOCItemsSettings from '@mapstore/components/TOC/TOCItemsSettings';
+import { initialSettingsSelector, originalSettingsSelector, activeTabSettingsSelector } from '@mapstore/selectors/controls';
+import {layerSettingSelector, groupsSelector, elementSelector} from '@mapstore/selectors/layers';
+import {mapLayoutValuesSelector} from '@mapstore/selectors/maplayout';
+import {currentLocaleSelector, currentLocaleLanguageSelector} from '@mapstore/selectors/locale';
+import {isAdminUserSelector} from '@mapstore/selectors/security';
+import {isLocalizedLayerStylesEnabledSelector} from '@mapstore/selectors/localizedLayerStyles';
+import {setControlProperty} from '@mapstore/actions/controls';
+import {toggleStyleEditor} from '@mapstore/actions/styleeditor';
+
+import LayersUtils from '@js/utils/LayersUtils';
+import defaultSettingsTabs from "@js/plugins/tocitemssettings/defaultSettingsTabs";
 
 const tocItemsSettingsSelector = createSelector([
     layerSettingSelector,

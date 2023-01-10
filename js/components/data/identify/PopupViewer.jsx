@@ -6,17 +6,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react';
-import loadingState from '../../../../MapStore2/web/client/components/misc/enhancers/loadingState';
-import {defaultViewerHandlers, defaultViewerDefaultProps} from '../../../../MapStore2/web/client/components/data/identify/enhancers/defaultViewer';
 import { compose, defaultProps} from 'recompose';
 import {connect} from 'react-redux';
-import { createSelector} from 'reselect';
-import {indexSelector, responsesSelector, requestsSelector, showEmptyMessageGFISelector, featureInfoClickFormatSelector, identifyGfiTypeSelector, validResponsesSelector, isLoadedResponseSelector} from '../../../selectors/mapInfo';
-import {changePage} from '../../../actions/mapInfo';
-import Viewer from './DefaultViewer';
 import {isArray, isUndefined} from 'lodash';
-import SwipeHeader from '../../../../MapStore2/web/client/components/data/identify/SwipeHeader';
-const {isMouseMoveIdentifyActiveSelector: identifyFloatingTool } = require('../../../../MapStore2/web/client/selectors/map');
+import { createSelector} from 'reselect';
+
+import SwipeHeader from '@mapstore/components/data/identify/PopupViewer';
+import loadingState from "@mapstore/components/misc/enhancers/loadingState";
+import {
+    defaultViewerHandlers,
+    defaultViewerDefaultProps
+} from "@mapstore/components/data/identify/enhancers/defaultViewer";
+const {isMouseMoveIdentifyActiveSelector: identifyFloatingTool } = require('@mapstore/selectors/map');
+
+import {indexSelector, responsesSelector, requestsSelector, showEmptyMessageGFISelector, featureInfoClickFormatSelector, identifyGfiTypeSelector, validResponsesSelector, isLoadedResponseSelector} from '@js/selectors/mapInfo';
+import {changePage} from '@js/actions/mapInfo';
+import Viewer from '@js/components/data/identify/DefaultViewer';
 
 /**
  * Container that render only the selected result

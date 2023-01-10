@@ -9,11 +9,11 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const ReactQuill = require('react-quill');
-const ResizableModal = require('../../../../../MapStore2/web/client/components/misc/ResizableModal');
-const Portal = require('../../../../../MapStore2/web/client/components/misc/Portal');
-const Message = require('../../../../../MapStore2/web/client/components/I18N/Message');
+const ResizableModal = require('@mapstore/components/misc/ResizableModal');
+const Portal = require('@mapstore/components/misc/Portal');
+const Message = require('@mapstore/components/I18N/Message');
 const {Quill} = ReactQuill;
-const {ResizeModule, IFrame, toolbarConfig} = require('../../../../../MapStore2/web/client/components/misc/quillmodules/ResizeModule')(Quill);
+const {ResizeModule, IFrame, toolbarConfig} = require('@mapstore/libs/quill/modules/ResizeModule')(Quill);
 
 Quill.register({
     'formats/video': IFrame,

@@ -22,9 +22,9 @@
     </context-param>
 
     <!-- spring context loader -->
-    <listener>
+    <!--listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-    </listener>
+    </listener-->
 
 	<!--
       - Loads the root application context of this web app at startup.
@@ -34,6 +34,16 @@
 	<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <!-- Allow to use RequestContextHolder -->
+    <filter>
+            <filter-name>springRequestContextFilter</filter-name>
+            <filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>springRequestContextFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
 
 	<!-- Spring Security Servlet -->
 	<filter>
@@ -80,7 +90,7 @@
       <servlet-name>mapfish.print</servlet-name>
       <url-pattern>/pdf/*</url-pattern>
     </servlet-mapping>
-	
+
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
