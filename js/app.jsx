@@ -5,12 +5,14 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import ConfigUtils from "../MapStore2/web/client/utils/ConfigUtils";
-import appConfig from "../MapStore2/web/client/product/appConfig";
-import main from "../MapStore2/web/client/product/main";
-import plugins from "../MapStore2/web/client/product/plugins";
+import ConfigUtils from "@mapstore/utils/ConfigUtils";
+import appConfig from "@mapstore/product/appConfig";
+import main from "@mapstore/product/main";
+
+import plugins from "@js/plugins";
 
 import "./customizations.css";
+
 /**
  * Add custom (overriding) translations with:
  *

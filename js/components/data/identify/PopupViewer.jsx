@@ -8,21 +8,17 @@
 import React from 'react';
 import { compose, defaultProps} from 'recompose';
 import {connect} from 'react-redux';
-import {isArray, isUndefined} from 'lodash';
 import { createSelector} from 'reselect';
+import {isArray, isUndefined} from 'lodash';
 
-import SwipeHeader from '@mapstore/components/data/identify/PopupViewer';
-import loadingState from "@mapstore/components/misc/enhancers/loadingState";
-import {
-    defaultViewerHandlers,
-    defaultViewerDefaultProps
-} from "@mapstore/components/data/identify/enhancers/defaultViewer";
-const {isMouseMoveIdentifyActiveSelector: identifyFloatingTool } = require('@mapstore/selectors/map');
+import loadingState from '@mapstore/components/misc/enhancers/loadingState';
+import SwipeHeader from '@mapstore/components/data/identify/SwipeHeader';
+import {identifyFloatingToolSelector } from '@mapstore/selectors/map';
+import {defaultViewerHandlers, defaultViewerDefaultProps} from '@mapstore/components/data/identify/enhancers/defaultViewer';
 
 import {indexSelector, responsesSelector, requestsSelector, showEmptyMessageGFISelector, featureInfoClickFormatSelector, identifyGfiTypeSelector, validResponsesSelector, isLoadedResponseSelector} from '@js/selectors/mapInfo';
 import {changePage} from '@js/actions/mapInfo';
 import Viewer from '@js/components/data/identify/DefaultViewer';
-
 /**
  * Container that render only the selected result
  */
@@ -51,10 +47,11 @@ const selector = createSelector([
     featureInfoClickFormatSelector,
     identifyGfiTypeSelector,
     showEmptyMessageGFISelector,
-    identifyFloatingTool,
+    identifyFloatingToolSelector,
     isLoadedResponseSelector,
-    state => state?.mapInfo?.warning],
-(responses, validResponses, requests, format, gfiType, showEmptyMessageGFI, renderEmpty, loaded, warning) => ({
+    state => state?.mapInfo?.warning
+],
+(responses, validResponses, requests, format, gfiType, showEmptyMessageGFI, renderValidOnly, loaded, warning) => ({
     responses,
     validResponses,
     requests,
@@ -62,7 +59,7 @@ const selector = createSelector([
     gfiType,
     showEmptyMessageGFI,
     missingResponses: (requests || []).length - (responses || []).length,
-    renderEmpty,
+    renderValidOnly,
     loaded: warning === 'NO_QUERYABLE_LAYERS' || loaded,
     noQueryableLayers: warning === 'NO_QUERYABLE_LAYERS'
 }));

@@ -6,30 +6,32 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
+import { compose, defaultProps, getContext, withPropsOnChange } from 'recompose';
 import {createSelector} from 'reselect';
-import { compose, defaultProps, withPropsOnChange, getContext} from 'recompose';
-import { createPlugin } from '@mapstore/utils/PluginsUtils';
-import {hideSettings, updateSettings, updateNode, updateSettingsParams} from '@mapstore/actions/layers';
-import {getLayerCapabilities} from '@mapstore/actions/layerCapabilities';
-import {updateSettingsLifecycle} from "@mapstore/components/TOC/enhancers/tocItemsSettings";
-import TOCItemsSettings from '@mapstore/components/TOC/TOCItemsSettings';
-import { initialSettingsSelector, originalSettingsSelector, activeTabSettingsSelector } from '@mapstore/selectors/controls';
-import {layerSettingSelector, groupsSelector, elementSelector} from '@mapstore/selectors/layers';
-import {mapLayoutValuesSelector} from '@mapstore/selectors/maplayout';
-import {currentLocaleSelector, currentLocaleLanguageSelector} from '@mapstore/selectors/locale';
-import {isAdminUserSelector} from '@mapstore/selectors/security';
-import {isLocalizedLayerStylesEnabledSelector} from '@mapstore/selectors/localizedLayerStyles';
-import {setControlProperty} from '@mapstore/actions/controls';
-import {toggleStyleEditor} from '@mapstore/actions/styleeditor';
 
-import LayersUtils from '@js/utils/LayersUtils';
-import defaultSettingsTabs from "@js/plugins/tocitemssettings/defaultSettingsTabs";
+import {setControlProperty} from '@mapstore/actions/controls';
+import {getLayerCapabilities} from '@mapstore/actions/layerCapabilities';
+import {hideSettings, updateNode, updateSettings, updateSettingsParams} from '@mapstore/actions/layers';
+import {toggleStyleEditor} from '@mapstore/actions/styleeditor';
+import TOCItemsSettings from '@mapstore/components/TOC/TOCItemsSettings';
+import { activeTabSettingsSelector, initialSettingsSelector, originalSettingsSelector } from '@mapstore/selectors/controls';
+import {elementSelector, groupsSelector, layerSettingSelector, layersSelector} from '@mapstore/selectors/layers';
+import {currentLocaleLanguageSelector, currentLocaleSelector} from '@mapstore/selectors/locale';
+import {isLocalizedLayerStylesEnabledSelector} from '@mapstore/selectors/localizedLayerStyles';
+import {mapLayoutValuesSelector} from '@mapstore/selectors/maplayout';
+import {isAdminUserSelector} from '@mapstore/selectors/security';
+import { createPlugin } from '@mapstore/utils/PluginsUtils';
+import { isCesium } from '@mapstore/selectors/maptype';
+import {updateSettingsLifecycle} from "@mapstore/components/TOC/enhancers/tocItemsSettings";
+
+import defaultSettingsTabs from '@js/plugins/tocitemssettings/defaultSettingsTabs';
+import { getDimension } from '@js/utils/LayersUtils';
 
 const tocItemsSettingsSelector = createSelector([
     layerSettingSelector,
+    layersSelector, // TODO removed in customization, to check why
     groupsSelector,
     currentLocaleSelector,
     currentLocaleLanguageSelector,
@@ -39,8 +41,9 @@ const tocItemsSettingsSelector = createSelector([
     originalSettingsSelector,
     activeTabSettingsSelector,
     elementSelector,
-    isLocalizedLayerStylesEnabledSelector
-], (settings, groups, currentLocale, currentLocaleLanguage, dockStyle, isAdmin, initialSettings, originalSettings, activeTab, element, isLocalizedLayerStylesEnabled) => ({
+    isLocalizedLayerStylesEnabledSelector,
+    isCesium
+], (settings, layers, groups, currentLocale, currentLocaleLanguage, dockStyle, isAdmin, initialSettings, originalSettings, activeTab, element, isLocalizedLayerStylesEnabled, isCesiumActive) => ({
     settings,
     element,
     groups,
@@ -51,7 +54,8 @@ const tocItemsSettingsSelector = createSelector([
     initialSettings,
     originalSettings,
     activeTab,
-    isLocalizedLayerStylesEnabled
+    isLocalizedLayerStylesEnabled,
+    isCesiumActive
 }));
 
 /**
@@ -94,7 +98,8 @@ const TOCItemsSettingsPlugin = compose(
     }),
     updateSettingsLifecycle,
     defaultProps({
-        getDimension: LayersUtils.getDimension
+        getDimension: getDimension,
+        enableLayerNameEditFeedback: true
     }),
     getContext({
         loadedPlugins: PropTypes.object
@@ -106,11 +111,6 @@ const TOCItemsSettingsPlugin = compose(
     }))
 )(TOCItemsSettings);
 
-/**
- * TOCItemsSettings. Add to the TOC the possibility to edit layers.
- * @memberof plugins
- * @requires plugins.TOC
- */
 export default createPlugin('TOCItemsSettings', {
     component: TOCItemsSettingsPlugin,
     containers: {

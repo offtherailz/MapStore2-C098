@@ -4,6 +4,14 @@ const themeEntries = require("./MapStore2/build/themes.js").themeEntries;
 const extractThemesPlugin = require("./MapStore2/build/themes.js").extractThemesPlugin;
 const ModuleFederationPlugin = require("./MapStore2/build/moduleFederation.js").plugin;
 
+const devServer = {
+    target: "https://webgis.sir.toscana.it",
+    secure: false,
+    headers: {
+        host: "webgis.sir.toscana.it"
+    }
+};
+
 const webpackConfig = require("./MapStore2/build/buildConfig")({
     bundles: {
         "MapStore2-C098": path.join(__dirname, "js", "app"),
@@ -31,28 +39,18 @@ const webpackConfig = require("./MapStore2/build/buildConfig")({
     },
     proxy: {
         "/rest/geostore": {
-            target: "http://webgis.sir.toscana.it",
+            ...devServer,
+            target: "https://webgis.sir.toscana.it",
             pathRewrite: {"^/rest/geostore": "/mapstore/rest/geostore"}
         },
         "/pdf": {
-            target: "http://webgis.sir.toscana.it/mapstore"
+            ...devServer,
+            target: "https://webgis.sir.toscana.it/mapstore"
         },
-        "/mapstore/pdf": {
-            target: "http://webgis.sir.toscana.it"
-        },
-        "/MapStore2/proxy": {
-            target: "http://webgis.sir.toscana.it"
-        },
-        "/geoserver/": { // TODO change this
-            target: "http://webgis.sir.toscana.it"
-        }
+        "/mapstore/pdf": devServer,
+        "/MapStore2/proxy": devServer,
+        "/geoserver/": devServer
     }
 });
 
-module.exports = {
-    ...webpackConfig,
-    plugins: [
-        ...(webpackConfig.plugins || []),
-        ...(require("./module-replacements.webpack") || [])
-    ]
-};
+module.exports = webpackConfig;
