@@ -1,6 +1,5 @@
 const path = require("path");
 
-const themeEntries = require("./MapStore2/build/themes.js").themeEntries;
 const extractThemesPlugin = require("./MapStore2/build/themes.js").extractThemesPlugin;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("./MapStore2/build/moduleFederation.js").plugin;

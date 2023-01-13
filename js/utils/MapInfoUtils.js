@@ -179,7 +179,7 @@ export const getMarkerLayer = (name, clickedMapPoint, styleName, otherParams, ma
 export const buildIdentifyRequest = (layer, options) => {
     if (MapInfoUtils.services[layer.type]) {
         let infoFormat = MapInfoUtils.getDefaultInfoFormatValueFromLayer(layer, options);
-        let viewer = MapInfoUtils.getLayerGfiViewer(layer);
+        let viewer = MapInfoUtils.getLayerGfiViewer(layer, options);
         const gfiOptions = MapInfoUtils.getLayerGfiOptions(layer);
         return MapInfoUtils.services[layer.type].buildRequest(layer, options, infoFormat, viewer, gfiOptions);
     }
@@ -215,7 +215,7 @@ export const getValidator = (format) => {
                     if (current.queryParams && current.queryParams.hasOwnProperty('outputFormat')) {
                         infoFormat = current.queryParams.outputFormat;
                     }
-                    const valid = (Validator[current.format || INFO_FORMATS_BY_MIME_TYPE[infoFormat] || INFO_FORMATS_BY_MIME_TYPE[format]] || defaultValidator).getValidResponses([current]);
+                    const valid = (Validator[current.format || INFO_FORMATS_BY_MIME_TYPE[infoFormat] || INFO_FORMATS_BY_MIME_TYPE[format]] || defaultValidator).getValidResponses([current], true);
                     return [...previous, ...valid];
                 }
                 return [...previous];
@@ -322,6 +322,8 @@ MapInfoUtils = {
     getDefaultInfoFormatValue,
     clickedPointToGeoJson,
     services,
+    getLayerGfiViewer,
+    getLayerGfiOptions,
     getDefaultInfoFormatValueFromLayer,
     getLayerFeatureInfoViewer,
     getLayerFeatureInfo,

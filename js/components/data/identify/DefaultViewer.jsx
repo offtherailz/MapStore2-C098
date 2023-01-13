@@ -82,7 +82,7 @@ class DefaultViewer extends React.Component {
     getResponseProperties = () => {
         const validator = this.props.validator(this.props.format);
         const responses = this.props.responses.map(res => res === undefined ? {} : res); // Replace any undefined responses
-        const validResponses = (this.props.renderValidOnly ? validator.getValidResponses(responses) : responses).filter(res => !isNil(res.response)); // empty response is invalid
+        const validResponses = responses.filter(res => !isNil(res.response)); // empty response is invalid
 
         const invalidResponses = validator.getNoValidResponses(this.props.responses);
         const emptyResponses = this.props.requests.length === invalidResponses.length;

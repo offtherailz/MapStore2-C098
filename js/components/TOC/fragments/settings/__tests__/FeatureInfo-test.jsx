@@ -73,7 +73,7 @@ describe("test FeatureInfo", () => {
 
     it('test changes on click', done => {
         ReactDOM.render(<FeatureInfo onChange={(key, value) => {
-            expect(key).toBe('FeatureInfo');
+            expect(key).toBe('featureInfo');
             expect(value.format).toBe('TEXT');
             done();
         }} formatCards={formatCards} defaultInfoFormat={defaultInfoFormat}/>, document.getElementById("container"));

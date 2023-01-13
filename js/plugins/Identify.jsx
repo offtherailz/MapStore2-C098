@@ -317,16 +317,18 @@ export default {
             })
         },
         Settings: (config = {}) => ({
-            tool: [<FeatureInfoFormatSelector
-                key="featureinfoformat"
-                label={<Message msgId="infoFormatLbl" />
-                } />, ...[
-                config.cfg?.enableMapTipFormat ? [
+            tool: [
+                <FeatureInfoFormatSelector
+                    key="featureinfoformat"
+                    label={<Message msgId="infoFormatLbl" />
+                    }
+                />,
+                config.cfg?.enableMapTipFormat ?
                     <MapTipFormatSelector
                         key="maptipformat"
                         label={<Message msgId="mapTipFormatLbl" />}/>
-                ] : []
-            ], <FeatureInfoTriggerSelector key="featureinfotrigger" />
+                    : null,
+                <FeatureInfoTriggerSelector key="featureinfotrigger" />
             ],
             position: 3
         })

@@ -467,5 +467,6 @@ export default {
     removePopupOnUnregister,
     removePopupOnLocationChangeEpic,
     removeMapInfoMarkerOnRemoveMapPopupEpic,
-    setMapTriggerEpic
+    setMapTriggerEpic,
+    setMapTipActveLayerIdEpic
 };
