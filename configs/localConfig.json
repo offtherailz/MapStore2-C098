@@ -671,6 +671,9 @@
         "name": "SearchServicesConfig"
       },
       {
+        "name": "SearchByBookmark"
+      },
+      {
         "name": "WidgetsBuilder"
       },
       {
