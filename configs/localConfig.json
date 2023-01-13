@@ -115,7 +115,8 @@
           "staticServices": {
             "default_map_backgrounds": {
               "type": "backgrounds",
-              "title": "defaultMapBackgroundsServiceTitle",
+              "title": "Default Backgrounds",
+              "titleMsgId": "defaultMapBackgroundsServiceTitle",
               "autoload": true,
               "backgrounds": [
                 {
@@ -1041,12 +1042,12 @@
       {
         "name": "DashboardEditor",
         "cfg": {
-          "selectedService": "Demo WMS Service",
+          "selectedService": "GEO",
           "services": {
-            "Demo WMS Service": {
-              "url": "/geoserver/wms",
+            "GEO": {
+              "url": "https://wms.cfr.toscana.it/geoserver/geo/wms",
               "type": "wms",
-              "title": "Demo WMS Service",
+              "title": "GEO",
               "autoload": true
             }
           },

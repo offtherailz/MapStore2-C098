@@ -12,7 +12,7 @@ const ModuleFederationPlugin = require("./MapStore2/build/moduleFederation.js").
  */
 
 const protocol = "http";
-const port = "8080";
+const port = "8666";
 const host = "localhost";
 
 const devServerUrl = `${protocol}://${host}${port ? ":" + port : ""}`;
@@ -64,10 +64,10 @@ const webpackConfig = require("./MapStore2/build/buildConfig")({
             target: devServerUrl + "/mapstore"
         },
         "/geoserver/": {
-            target: devServerUrl,
+            target: "https://webgis.cfr.toscana.it",
             secure: false,
             headers: {
-                host: host
+                host: "webgis.cfr.toscana.it"
             }
         }
     }
