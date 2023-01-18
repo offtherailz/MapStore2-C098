@@ -12,10 +12,11 @@ const ModuleFederationPlugin = require("./MapStore2/build/moduleFederation.js").
  */
 
 const protocol = "http";
-const port = "8666";
+const port = "8080";
 const host = "localhost";
+const basePath = "/mapstore";
 
-const devServerUrl = `${protocol}://${host}${port ? ":" + port : ""}`;
+const devServerUrl = `${protocol}://${host}${port ? ":" + port : ""}${basePath}`;
 const devServer = {
     target: devServerUrl,
     secure: false,
@@ -50,19 +51,9 @@ const webpackConfig = require("./MapStore2/build/buildConfig")({
         "@js": path.resolve(__dirname, "js")
     },
     proxy: {
-        "/rest/geostore": {
-            ...devServer,
-            pathRewrite: {"^/rest/geostore": "/mapstore/rest/geostore"}
-        },
-        "/pdf": {
-            ...devServer,
-            target: devServerUrl + "/mapstore"
-        },
-        "/mapstore/pdf": devServer,
-        "/proxy": {
-            ...devServer,
-            target: devServerUrl + "/mapstore"
-        },
+        "/rest/geostore": devServer,
+        "/pdf": devServer,
+        "/proxy": devServer,
         "/geoserver/": {
             target: "https://webgis.cfr.toscana.it",
             secure: false,
